@@ -1,0 +1,6 @@
+A:\Phone Apps Developed\FarmApplication\FarmApplication\bin\Debug\FarmApplication.exe.config
+A:\Phone Apps Developed\FarmApplication\FarmApplication\obj\Debug\FarmApplication.csprojResolveAssemblyReference.cache
+A:\Phone Apps Developed\FarmApplication\FarmApplication\bin\Debug\FarmApplication.exe
+A:\Phone Apps Developed\FarmApplication\FarmApplication\bin\Debug\FarmApplication.pdb
+A:\Phone Apps Developed\FarmApplication\FarmApplication\obj\Debug\FarmApplication.exe
+A:\Phone Apps Developed\FarmApplication\FarmApplication\obj\Debug\FarmApplication.pdb
