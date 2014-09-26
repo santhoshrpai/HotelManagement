@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using System.Threading;
 
 
-public delegate void priceCutEvent(Int32 pr);
+public delegate void priceCutEvent(Int32 pr, String hotelname);
+public delegate void orderinBuffer();
 namespace HotelManagement
 {
     class MainClass
@@ -33,20 +34,32 @@ namespace HotelManagement
             Console.WriteLine(newz.getcardNumber());*/
 
 
-            MultiCellBuffer sembuffer = new MultiCellBuffer();
-            sembuffer.setOnecell("value");
-            HotelSupplier supplier = new HotelSupplier();
-            Thread hotel = new Thread(new ThreadStart(supplier.pricingModel));
-            hotel.Start();
+           // MultiCellBuffer sembuffer = new MultiCellBuffer();
+           // sembuffer.setOnecell("value");
+            HotelSupplier supplier1 = new HotelSupplier("Holiday Inn",40);
+            HotelSupplier supplier2 = new HotelSupplier("Chen Son",30);
+            //HotelSupplier supplier3 = new HotelSupplier("Machans",25);
+
+            Thread hotel1 = new Thread(new ThreadStart(supplier1.pricingModel));
+            Thread hotel2 = new Thread(new ThreadStart(supplier2.pricingModel));
+            //Thread hotel3 = new Thread(new ThreadStart(supplier3.pricingModel));
+            hotel1.Start();
+            hotel2.Start();
+            //hotel3.Start();
+
+            Thread hotel1check = new Thread(new ThreadStart(supplier1.checkOrderFromMultibuffer));
+            hotel1check.Start();
+
             TravelAgency agency = new TravelAgency();
             HotelSupplier.priceCutEvent += new priceCutEvent(agency.HotelOnSale);
-            Thread[] retailers = new Thread[3];
-            for (int i = 0; i < 1; i++)
-            {
-                retailers[i] = new Thread(new ThreadStart(agency.RetailerFunction));
-                retailers[i].Name = (i + 1).ToString();
-                retailers[i].Start();
-            }
+            
+            //Thread[] retailers = new Thread[3];
+            //for (int i = 0; i < 1; i++)
+            //{
+            //    retailers[i] = new thread(new threadstart(agency.retailerfunction));
+            //    retailers[i].name = (i + 1).tostring();
+            //    retailers[i].start();
+            //}
         }
     }
 }

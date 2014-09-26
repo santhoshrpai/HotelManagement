@@ -34,38 +34,38 @@ namespace HotelManagement
             //*********************************************
             //          Method farmerFunc
             //*********************************************
-            public void HotelOnSale(Int32 p)
-            {
-                Console.WriteLine("Hotel Supplier on sale:has everyday low price : ${0} per room", p);
-
-                // Check the price and generate the number of rooms based on it
-                if (p < 70)
-                {
-                    noOfRooms = random.Next(1, 5);
-                }
-                else
-                {
-                    noOfRooms = random.Next(5, 10);
-                }
-                   
-                placeOrder(noOfRooms, p);
-                
-            }
-
-
-            public static void placeOrder(int noOfRooms, int price)
+       public void HotelOnSale(Int32 p, String hotelname)
+       {
+           // Check the price and generate the number of rooms based on it
+           if (p < 70)
+           {
+               noOfRooms = random.Next(1, 5);
+           }
+           else
+           {
+               noOfRooms = random.Next(5, 10);
+              
+           }
+           Console.WriteLine("Travel Agency accepted {0} price and booking at : ${1} per room and {2} rooms",hotelname, p, noOfRooms);
+           placeOrder(noOfRooms, p, hotelname);
+       }
+            //*********************************************
+            //          placeOrder
+            //*********************************************
+            public static void placeOrder(int noOfRooms, int price ,String hotelname)
             {
                 OrderObject order = new OrderObject();
                 order.setsenderID("Thread1");
-                order.setreceiverID("Pravin");
+                order.setreceiverID(hotelname);
                 order.setcardNumber(2353);
                 order.setamount(noOfRooms * price);
 
                 // Encoding
                 EncoderandDecoder encoder = new EncoderandDecoder();
                 String encodedOrder = encoder.encode(order);
-                
-
+                MultiCellBuffer sembuffer = new MultiCellBuffer();
+                sembuffer.setOnecell(encodedOrder);
+               
             }
 
             

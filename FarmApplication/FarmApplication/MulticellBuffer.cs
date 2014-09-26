@@ -3,42 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-
+using System.Collections;
 namespace HotelManagement
 {
 
-    class MultiCellBuffer
-    {           
-        private static String[] multicellBuffer = new String[3];
-        private static Semaphore pool = new Semaphore(0, 3);
+     class MultiCellBuffer
+    {
+         private static ArrayList buffer = new ArrayList();
+         public static Semaphore pool;
 
-        public MultiCellBuffer() {
-            pool.Release(3);
+         public MultiCellBuffer() {
+         pool= new Semaphore(0, 3);
+         pool.Release(3);
+       
         }
 
-        public MultiCellBuffer(String order) {
-
-        }
-
-
-        //Thread placeIt = new Thread(new ParameterizedThreadStart(OrderObject));
+        //Thread placeIt = new Thread(new Parameterize  dThreadStart(OrderObject));
 
         public void setOnecell(String order){
         pool.WaitOne();
-        Console.WriteLine("Wrt 1" );
-        pool.WaitOne();
-        Console.WriteLine("Wrt2");
-        pool.WaitOne();
-        Console.WriteLine("Wrt3");
-        pool.WaitOne();
-        Console.WriteLine("Wrt what");
-        pool.Release();
-        Console.WriteLine("Wrt new");
-           
+            if(buffer.Count<3)
+            {
+                buffer.Add(order);
+                Console.WriteLine("Order is set in buffer");
+            }       
         }
 
-        public void getOneCell(){
+
+
+        public void getOneCell(String order){
          pool.Release();
+         buffer.Remove(order);
+         Console.WriteLine("Order removed from buffer");
+     
+        }
+
+        public ArrayList sendbuffer()
+        {
+            return buffer;
         }
  
     }
