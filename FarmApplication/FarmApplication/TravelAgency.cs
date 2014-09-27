@@ -46,7 +46,7 @@ namespace HotelManagement
                noOfRooms = random.Next(5, 10);
               
            }
-           Console.WriteLine("Travel Agency accepted {0} price and booking at : ${1} per room and {2} rooms",hotelname, p, noOfRooms);
+           Console.WriteLine("      Agency booking {0} at : ${1} per room{2} rooms",hotelname, p, noOfRooms);
            placeOrder(noOfRooms, p, hotelname);
        }
             //*********************************************

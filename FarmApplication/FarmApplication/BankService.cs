@@ -8,5 +8,6 @@ namespace HotelManagement
 {
     class BankService
     {
+
     }
 }

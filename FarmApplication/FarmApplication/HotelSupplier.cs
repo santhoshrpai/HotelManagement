@@ -75,14 +75,11 @@ namespace HotelManagement
         }
 
 
-        //*********************************************
-        //          Method OrderProcessing
-        //*********************************************
-        public void OrderProcessing()
+        public void processOrder(OrderObject obj)
         {
 
-
         }
+
         //*********************************************
         //          Read Order
         //*********************************************
@@ -91,7 +88,7 @@ namespace HotelManagement
             MultiCellBuffer sembuffer = new MultiCellBuffer();
             while (true)
             {
-               Thread.Sleep(5000);
+               Thread.Sleep(500);
                ArrayList buffer = sembuffer.sendbuffer();
                if(buffer.Count>0)
                {
@@ -101,21 +98,17 @@ namespace HotelManagement
                        if(orderrefernce.Contains(this.hotelName))
                        {
                            sembuffer.getOneCell(orderrefernce);
-
+                           EncoderandDecoder decoder= new EncoderandDecoder();
+                           OrderObject obj = new OrderObject();
+                           obj=decoder.decode(orderrefernce);
+                           processOrder(obj);
+                           
                        }
                    }
                }
                 
             }
         } 
-         //*********************************************
-        //          Read Order
-        //*********************************************
-        public void DecodeOrder()
-        {
-
-        }
- 
 
  
 

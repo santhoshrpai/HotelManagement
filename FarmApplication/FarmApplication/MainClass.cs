@@ -37,14 +37,14 @@ namespace HotelManagement
            // MultiCellBuffer sembuffer = new MultiCellBuffer();
            // sembuffer.setOnecell("value");
             HotelSupplier supplier1 = new HotelSupplier("Holiday Inn",40);
-            HotelSupplier supplier2 = new HotelSupplier("Chen Son",30);
+           // HotelSupplier supplier2 = new HotelSupplier("Chen Son",30);
             //HotelSupplier supplier3 = new HotelSupplier("Machans",25);
 
             Thread hotel1 = new Thread(new ThreadStart(supplier1.pricingModel));
-            Thread hotel2 = new Thread(new ThreadStart(supplier2.pricingModel));
+            //Thread hotel2 = new Thread(new ThreadStart(supplier2.pricingModel));
             //Thread hotel3 = new Thread(new ThreadStart(supplier3.pricingModel));
             hotel1.Start();
-            hotel2.Start();
+           // hotel2.Start();
             //hotel3.Start();
 
             Thread hotel1check = new Thread(new ThreadStart(supplier1.checkOrderFromMultibuffer));

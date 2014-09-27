@@ -25,16 +25,16 @@ namespace HotelManagement
             if(buffer.Count<3)
             {
                 buffer.Add(order);
-                Console.WriteLine("Order is set in buffer");
+                Console.WriteLine("***********Order is set in buffer");
             }       
         }
 
 
 
         public void getOneCell(String order){
-         pool.Release();
          buffer.Remove(order);
-         Console.WriteLine("Order removed from buffer");
+         
+         Console.WriteLine("***********Order removed from buffer {0}",pool.Release());
      
         }
 

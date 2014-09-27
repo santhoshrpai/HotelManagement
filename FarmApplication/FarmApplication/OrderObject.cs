@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelManagement
 {
-    class OrderObject
+    public class OrderObject
     {
        private String senderID;
        private String receiverID;
