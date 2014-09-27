@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Collections;
 
 
+
 namespace HotelManagement
 {
    
@@ -67,17 +68,29 @@ namespace HotelManagement
         {
             for (Int32 i = 0; i < 20; i++)
             {
-                Thread.Sleep(2000);
+                //Timing
+                Thread.Sleep(5000);
                 Int32 p = rng.Next(25, 100);
                 HotelSupplier.changePrice(p,hotelName);
             }
 
         }
 
-
         public void processOrder(OrderObject obj)
         {
+            FarmApplication.EncryptDecryptService.ServiceClient client = new FarmApplication.EncryptDecryptService.ServiceClient();
+            String encryptedstring = client.Encrypt(obj.getcardNumber().ToString());
+            BankService bankser = new BankService();
+            String result=bankser.validateCard(encryptedstring);
+            if (result == "Valid")
+            {
+                Console.WriteLine("Validation Success!!! Payment Received");
+                Console.WriteLine("\n\t\t**********Booking Reciept ***************\n\t\tHotel:{0}\n\t\tAgency:{1}\n\t\tCard No:{2}\n\t\tAmount:{3}\n\t\tTAX:(0.08%){4}\n\t\tTotal:{5}\n\t\t*********************************\n", obj.getreceiverID(), obj.getsenderID(), obj.getcardNumber(), obj.getamount(), obj.getamount() * 0.08,obj.getamount()*1.08);
 
+            }
+            else
+                Console.WriteLine("Invalid Card - Not Registered");
+                Console.WriteLine("\n\t\t**********Booking Reciept ***************");
         }
 
         //*********************************************
@@ -88,25 +101,18 @@ namespace HotelManagement
             MultiCellBuffer sembuffer = new MultiCellBuffer();
             while (true)
             {
-               Thread.Sleep(500);
-               ArrayList buffer = sembuffer.sendbuffer();
-               if(buffer.Count>0)
+                //Timing
+              
+               Thread.Sleep(6000);
+               //Console.WriteLine("check buffer for {0}", hotelName);
+               String placedorder = sembuffer.getOneCell(this.hotelName);
+               if (placedorder != null)
                {
-                   for (int i = 0; i < buffer.Count;i++)
-                   {
-                       String orderrefernce= (String)buffer[i];
-                       if(orderrefernce.Contains(this.hotelName))
-                       {
-                           sembuffer.getOneCell(orderrefernce);
-                           EncoderandDecoder decoder= new EncoderandDecoder();
-                           OrderObject obj = new OrderObject();
-                           obj=decoder.decode(orderrefernce);
-                           processOrder(obj);
-                           
-                       }
-                   }
+                   OrderObject obj = new OrderObject();
+                   EncoderandDecoder decoder = new EncoderandDecoder();
+                   obj = decoder.decode(placedorder);
+                   processOrder(obj);
                }
-                
             }
         } 
 

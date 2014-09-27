@@ -16,7 +16,12 @@ namespace HotelManagement
    public class TravelAgency
     {
        Random random = new Random();
+       private String Agencyname;
        int noOfRooms = 0;
+
+       public TravelAgency(String name)
+       { Agencyname = name; }
+
             //*********************************************
             //          Method RetailerFunction
             //*********************************************
@@ -46,18 +51,19 @@ namespace HotelManagement
                noOfRooms = random.Next(5, 10);
               
            }
-           Console.WriteLine("      Agency booking {0} at : ${1} per room{2} rooms",hotelname, p, noOfRooms);
-           placeOrder(noOfRooms, p, hotelname);
+           placeOrder(noOfRooms, p, hotelname, Agencyname);
        }
             //*********************************************
             //          placeOrder
             //*********************************************
-            public static void placeOrder(int noOfRooms, int price ,String hotelname)
+            public static void placeOrder(int noOfRooms, int price ,String hotelname, String agencyname)
             {
+                Random rnd = new Random();
+                Int32 creditcard =rnd.Next(1000, 7999);
                 OrderObject order = new OrderObject();
-                order.setsenderID("Thread1");
+                order.setsenderID(agencyname);
                 order.setreceiverID(hotelname);
-                order.setcardNumber(2353);
+                order.setcardNumber(creditcard);
                 order.setamount(noOfRooms * price);
 
                 // Encoding

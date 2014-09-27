@@ -13,35 +13,61 @@ namespace HotelManagement
          public static Semaphore pool;
 
          public MultiCellBuffer() {
-         pool= new Semaphore(0, 3);
-         pool.Release(3);
-       
+
         }
+         public MultiCellBuffer (string value)
+         {
+             pool = new Semaphore(0, 3);
+             pool.Release(3);
+         }
 
         //Thread placeIt = new Thread(new Parameterize  dThreadStart(OrderObject));
 
         public void setOnecell(String order){
-        pool.WaitOne();
-            if(buffer.Count<3)
+        pool.WaitOne(20);
+        lock (buffer)
+        {
+            if (buffer.Count < 3)
             {
                 buffer.Add(order);
-                Console.WriteLine("***********Order is set in buffer");
-            }       
+                string[] parts = order.Split(new string[] { ":" }, StringSplitOptions.None);
+                Console.WriteLine("\n**********Order Has created***************\nHotel:{0}\nAgency:{1}\nCard No:{2}\nAmount:{3}\n*********************************\n", parts[1], parts[0],parts[2],parts[3]);
+            }
+        }
         }
 
 
 
-        public void getOneCell(String order){
-         buffer.Remove(order);
-         
-         Console.WriteLine("***********Order removed from buffer {0}",pool.Release());
-     
-        }
+        public String getOneCell(String hotelname){
+            if (buffer.Count > 0)
+            {
+                for (int i = 0; i < buffer.Count; i++)
+                {
+                    try
+                    {
+                        lock (buffer)
+                        {
+                            String singleorder = (String)buffer[i];
+                            if (hotelname != null)
+                            {
+                                if (singleorder.Contains(hotelname))
+                                {
+                                    buffer.Remove(singleorder);
+                                    string[] parts = singleorder.Split(new string[] { ":" }, StringSplitOptions.None);
+                                    Console.WriteLine("\nOrder Recognized sent for process\nHotel:{0} \nAgency:{1}\n\n", parts[1], parts[0]);
 
-        public ArrayList sendbuffer()
-        {
-            return buffer;
+                                    return singleorder;
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                       
+                    }
+                }
+            }
+            return null;
         }
- 
     }
 }

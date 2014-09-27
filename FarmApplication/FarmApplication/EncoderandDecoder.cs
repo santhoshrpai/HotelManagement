@@ -23,8 +23,6 @@ namespace HotelManagement
             decodedobj.setcardNumber(Int32.Parse( parts[2]));
             decodedobj.setamount(Int32.Parse( parts[3]));
             return decodedobj;
-
-
         }
     }
 }
