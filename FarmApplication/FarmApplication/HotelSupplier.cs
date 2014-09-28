@@ -14,21 +14,22 @@ namespace HotelManagement
     //************************************************************************************************************
     //          Class HotelSupplier
     //
-    // Definition:
+    // Definition: Hotel Supplier which invokes price cut event and receives the order from MulticellBuffer
     //************************************************************************************************************
     
     public class HotelSupplier
     {
         static Random rng = new Random();
         public static event priceCutEvent priceCutEvent;
-        //private static Int32 Rooms = 10;
         private static Int32 hotelPrice;
         private String hotelName;
+        private Int32 totalNumberOfRooms;
 
-       public HotelSupplier(String name , Int32 initialPrice)
+       public HotelSupplier(String name , Int32 initialPrice, Int32 totalRooms)
         {
             this.hotelName = name;
             hotelPrice = initialPrice;
+            totalNumberOfRooms = totalRooms;
         }
         //*********************************************
         //          Method getPrice
@@ -54,9 +55,13 @@ namespace HotelManagement
         {
             if (price < hotelPrice)
             {
-                Console.WriteLine("{0} on sale price : ${1} per room",hotelName,price);
-                if (priceCutEvent != null)
-                    priceCutEvent(price,hotelName);
+                Console.WriteLine("\n\n\n\t\t***Price Down!!! Hurry up in BOOKING!!*** \n\t\t{0} on sale price : ${1} per room\n\n", hotelName, price);
+            } else {
+                Console.WriteLine("\n\n\n\t\t***Price Up!!! Market is at Peak,:-( !*** \n\t\t{0} on sale price : ${1} per room\n\n", hotelName, price);
+            }
+            if (priceCutEvent != null)
+            {
+                priceCutEvent(price, hotelName);
             }
             hotelPrice = price;
         }
@@ -66,10 +71,10 @@ namespace HotelManagement
         //*********************************************
         public void pricingModel()
         {
-            for (Int32 i = 0; i < 20; i++)
+            for (Int32 i = 0; i < 5; i++)
             {
                 //Timing
-                Thread.Sleep(5000);
+                Thread.Sleep(rng.Next(500,1000));
                 Int32 p = rng.Next(25, 100);
                 HotelSupplier.changePrice(p,hotelName);
             }
@@ -78,19 +83,28 @@ namespace HotelManagement
 
         public void processOrder(OrderObject obj)
         {
+            if (totalNumberOfRooms < obj.getRooms())
+            {
+                Console.WriteLine("\n\n\t\tRooms are full at {0} !! Sorry {1}!!\n", obj.getreceiverID(), obj.getsenderID());
+                return;
+            }
             FarmApplication.EncryptDecryptService.ServiceClient client = new FarmApplication.EncryptDecryptService.ServiceClient();
             String encryptedstring = client.Encrypt(obj.getcardNumber().ToString());
             BankService bankser = new BankService();
             String result=bankser.validateCard(encryptedstring);
             if (result == "Valid")
             {
-                Console.WriteLine("Validation Success!!! Payment Received");
-                Console.WriteLine("\n\t\t**********Booking Reciept ***************\n\t\tHotel:{0}\n\t\tAgency:{1}\n\t\tCard No:{2}\n\t\tAmount:{3}\n\t\tTAX:(0.08%){4}\n\t\tTotal:{5}\n\t\t*********************************\n", obj.getreceiverID(), obj.getsenderID(), obj.getcardNumber(), obj.getamount(), obj.getamount() * 0.08,obj.getamount()*1.08);
+                totalNumberOfRooms--;
+                DateTime now = DateTime.UtcNow;
+                TimeSpan difference = now.Subtract(obj.getTime());
+                obj.setOrderTime(difference.TotalSeconds);
+                TravelAgency.callback(obj);
 
             }
             else
-                Console.WriteLine("Invalid Card - Not Registered");
-                Console.WriteLine("\n\t\t**********Booking Reciept ***************");
+            {
+                Console.WriteLine("\n\n\n\t\tInvalid Card - Order received from {0} for {1} failed!!", obj.getsenderID(), obj.getreceiverID());
+            }
         }
 
         //*********************************************
@@ -98,19 +112,13 @@ namespace HotelManagement
         //*********************************************
         public void checkOrderFromMultibuffer()
         {
-            MultiCellBuffer sembuffer = new MultiCellBuffer();
             while (true)
             {
-                //Timing
-              
-               Thread.Sleep(6000);
-               //Console.WriteLine("check buffer for {0}", hotelName);
-               String placedorder = sembuffer.getOneCell(this.hotelName);
+               String placedorder = MainClass.multiCellBuffer.getOneCell(this.hotelName);
                if (placedorder != null)
                {
-                   OrderObject obj = new OrderObject();
                    EncoderandDecoder decoder = new EncoderandDecoder();
-                   obj = decoder.decode(placedorder);
+                   OrderObject obj = decoder.decode(placedorder);
                    processOrder(obj);
                }
             }

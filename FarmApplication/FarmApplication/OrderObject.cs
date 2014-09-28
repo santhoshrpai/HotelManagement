@@ -12,6 +12,27 @@ namespace HotelManagement
        private String receiverID;
        private Int32 cardNumber;  
        private Int32 amount;
+       private Int32 rooms;
+       private DateTime time;
+       private double orderTime;
+
+       public DateTime getTime()
+       {
+           return this.time;
+       }
+       public void setTime(DateTime time)
+       {
+           this.time = time;
+       }
+
+       public double getOrderTime()
+       {
+           return this.orderTime;
+       }
+       public void setOrderTime(double orderTime)
+       {
+           this.orderTime = orderTime;
+       }
 
         public String getsenderID()
         {
@@ -41,6 +62,15 @@ namespace HotelManagement
         public void setcardNumber(Int32 newcardNumber)
         {
             this.cardNumber = newcardNumber;
+        }
+
+        public Int32 getRooms()
+        {
+            return this.rooms;
+        }
+        public void setRooms(Int32 noOfRooms)
+        {
+            this.rooms = noOfRooms;
         }
 
 

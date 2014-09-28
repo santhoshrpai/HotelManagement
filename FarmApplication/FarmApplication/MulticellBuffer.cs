@@ -9,13 +9,11 @@ namespace HotelManagement
 
      class MultiCellBuffer
     {
-         private static ArrayList buffer = new ArrayList();
+         public static ArrayList buffer = new ArrayList();
          public static Semaphore pool;
+         private bool writable = true;
 
-         public MultiCellBuffer() {
-
-        }
-         public MultiCellBuffer (string value)
+         public MultiCellBuffer ()
          {
              pool = new Semaphore(0, 3);
              pool.Release(3);
@@ -24,16 +22,15 @@ namespace HotelManagement
         //Thread placeIt = new Thread(new Parameterize  dThreadStart(OrderObject));
 
         public void setOnecell(String order){
-        pool.WaitOne(20);
-        lock (buffer)
-        {
+          
             if (buffer.Count < 3)
             {
+                pool.WaitOne();
                 buffer.Add(order);
                 string[] parts = order.Split(new string[] { ":" }, StringSplitOptions.None);
-                Console.WriteLine("\n**********Order Has created***************\nHotel:{0}\nAgency:{1}\nCard No:{2}\nAmount:{3}\n*********************************\n", parts[1], parts[0],parts[2],parts[3]);
+                // Console.WriteLine("\n**********Order Has created***************\nHotel:{0}\nAgency:{1}\nCard No:{2}\nAmount:{3}\n*********************************\n", parts[1], parts[0],parts[2],parts[3]);
             }
-        }
+        
         }
 
 
@@ -45,7 +42,6 @@ namespace HotelManagement
                 {
                     try
                     {
-                        lock (buffer)
                         {
                             String singleorder = (String)buffer[i];
                             if (hotelname != null)
@@ -53,9 +49,9 @@ namespace HotelManagement
                                 if (singleorder.Contains(hotelname))
                                 {
                                     buffer.Remove(singleorder);
+                                    pool.Release();
                                     string[] parts = singleorder.Split(new string[] { ":" }, StringSplitOptions.None);
-                                    Console.WriteLine("\nOrder Recognized sent for process\nHotel:{0} \nAgency:{1}\n\n", parts[1], parts[0]);
-
+                                  //  Console.WriteLine("\nOrder Recognized sent for process\nHotel:{0} \nAgency:{1}\n\n", parts[1], parts[0]);
                                     return singleorder;
                                 }
                             }
