@@ -6,12 +6,13 @@ using System.Threading;
 using System.Collections;
 namespace HotelManagement
 {
-
+    /// <summary>
+    /// MultiCellBuffer to act as buffer space to place order
+    /// </summary>
      class MultiCellBuffer
     {
          public static ArrayList buffer = new ArrayList();
          public static Semaphore pool;
-         private bool writable = true;
 
          public MultiCellBuffer ()
          {
@@ -19,22 +20,24 @@ namespace HotelManagement
              pool.Release(3);
          }
 
-        //Thread placeIt = new Thread(new Parameterize  dThreadStart(OrderObject));
-
+         /// <summary>
+         /// Set an order in the buffer
+         /// </summary>
+         /// <param name="order"></param>
         public void setOnecell(String order){
-          
-            if (buffer.Count < 3)
+         if (buffer.Count < 3)
             {
                 pool.WaitOne();
                 buffer.Add(order);
                 string[] parts = order.Split(new string[] { ":" }, StringSplitOptions.None);
-                // Console.WriteLine("\n**********Order Has created***************\nHotel:{0}\nAgency:{1}\nCard No:{2}\nAmount:{3}\n*********************************\n", parts[1], parts[0],parts[2],parts[3]);
             }
-        
         }
 
-
-
+         /// <summary>
+         /// Get an order from the buffer
+         /// </summary>
+         /// <param name="hotelname"></param>
+         /// <returns></returns>
         public String getOneCell(String hotelname){
             if (buffer.Count > 0)
             {
@@ -51,7 +54,6 @@ namespace HotelManagement
                                     buffer.Remove(singleorder);
                                     pool.Release();
                                     string[] parts = singleorder.Split(new string[] { ":" }, StringSplitOptions.None);
-                                  //  Console.WriteLine("\nOrder Recognized sent for process\nHotel:{0} \nAgency:{1}\n\n", parts[1], parts[0]);
                                     return singleorder;
                                 }
                             }

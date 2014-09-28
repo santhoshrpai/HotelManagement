@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace HotelManagement
 {
+    /// <summary>
+    /// Order Class - POJO
+    /// </summary>
     public class OrderObject
     {
        private String senderID;

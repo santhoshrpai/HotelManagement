@@ -6,14 +6,28 @@ using System.Threading.Tasks;
 
 namespace HotelManagement
 {
+    /// <summary>
+    /// Encoding and Decoding class
+    /// </summary>
     class EncoderandDecoder
     {
+        /// <summary>
+        /// Encode by inserting ## between two values
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public String encode(OrderObject obj)
         {
             String encodedString = String.Format("{0}##{1}##{2}##{3}##{4}##{5}", obj.getsenderID(), obj.getreceiverID(), obj.getcardNumber(), obj.getamount(),obj.getTime(),obj.getRooms());
             return encodedString;
             
         }
+
+        /// <summary>
+        /// Decode by splitting the value by ##
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public OrderObject decode(String str)
         {
             OrderObject decodedobj= new OrderObject();

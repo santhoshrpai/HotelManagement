@@ -8,11 +8,9 @@ using System.Threading;
 namespace HotelManagement
 {
 
-  //************************************************************************************************************
-  //          Class TravelAgency
-  //
-  // Definition:
-  //************************************************************************************************************
+     /// <summary>
+     /// TravelAgency which receives the price cut event and books the rooms
+     /// </summary>
    public class TravelAgency
     {
        Random random = new Random();
@@ -22,23 +20,11 @@ namespace HotelManagement
        public TravelAgency(String name)
        { Agencyname = name; }
 
-            //*********************************************
-            //          Method RetailerFunction
-            //*********************************************
-       public void RetailerFunction()
-            {
-                /*HotelSupplier room = new HotelSupplier();
-                for (Int32 i = 0; i < 10; i++)
-                {
-                    Thread.Sleep(1000);
-                    Int32 p = room.getPrice();
-                    Console.WriteLine("Hotel Supplier {0} has everyday price : ${1} each", Thread.CurrentThread.Name, p);
-
-                }*/
-            }
-            //*********************************************
-            //          Method HotelFunc
-            //*********************************************
+       /// <summary>
+       /// Checks the price rise and fall and places the order accordingly
+       /// </summary>
+       /// <param name="p"></param>
+       /// <param name="hotelname"></param>
        public void HotelOnSale(Int32 p, String hotelname)
        {
            // Check the price and generate the number of rooms based on it
@@ -55,16 +41,23 @@ namespace HotelManagement
            Thread.Sleep(random.Next(500, 1000));
        }
 
+       /// <summary>
+       /// Callback method from the hotelsupplier to confirm the order
+       /// </summary>
+       /// <param name="obj"></param>
        public static void callback(OrderObject obj)
        {
            Console.WriteLine("\n\n\t\tValidation Success!!! Payment Received\n\t\t**********Booking Reciept ***************\n\t\tHotel:{0}\n\t\tAgency:{1}\n\t\tCard No:{2}\n\t\tAmount:{3}\n\t\t\n\t\tNo of Rooms:{4}\n\t\tTAX:(0.08%){5}\n\t\tTotal:{6}\n\t\tOrder Time:{7}\n\t\t*********************************\n", obj.getreceiverID(), obj.getsenderID(), obj.getcardNumber(), obj.getamount(), obj.getRooms(), obj.getamount() * 0.08, obj.getamount() * 1.08, obj.getOrderTime());
-
        }
 
 
-            //*********************************************
-            //          placeOrder
-            //*********************************************
+            /// <summary>
+            /// Places the Order
+            /// </summary>
+            /// <param name="noOfRooms"></param>
+            /// <param name="price"></param>
+            /// <param name="hotelname"></param>
+            /// <param name="agencyname"></param>
             public void placeOrder(int noOfRooms, int price ,String hotelname, String agencyname)
             {
                 Random rnd = new Random();
@@ -75,8 +68,6 @@ namespace HotelManagement
                 order.setcardNumber(creditcard);
                 order.setamount(noOfRooms * price);
                 order.setRooms(noOfRooms);
-
-                //Console.WriteLine("-------------------------------------------------------Order has been Created-------------/n{0}/n{1}--------", order.getsenderID(), order.getreceiverID());
 
                 bool flag = false;
                 try
@@ -96,11 +87,8 @@ namespace HotelManagement
                 }
                 finally
                 {
-                   // if (flag)
-                        
-                        Monitor.Exit(MainClass.multiCellBuffer);
-                     //   Console.WriteLine("-------------------------------------------------------LOCK released         --------------- Order has been Created-------------/n{0}/n{1}--------", order.getsenderID(), order.getreceiverID());
-
+                   Monitor.Exit(MainClass.multiCellBuffer);
+                   
                 }
              }
        }

@@ -10,13 +10,9 @@ using System.Collections;
 
 namespace HotelManagement
 {
-   
-    //************************************************************************************************************
-    //          Class HotelSupplier
-    //
-    // Definition: Hotel Supplier which invokes price cut event and receives the order from MulticellBuffer
-    //************************************************************************************************************
-    
+    /// <summary>
+    /// Hotel Supplier which invokes price cut event and receives and processes the order from MulticellBuffer
+    /// </summary>
     public class HotelSupplier
     {
         static Random rng = new Random();
@@ -31,26 +27,22 @@ namespace HotelManagement
             hotelPrice = initialPrice;
             totalNumberOfRooms = totalRooms;
         }
-        //*********************************************
-        //          Method getPrice
-        //*********************************************
+
         public Int32 getPrice()
         {
             return hotelPrice;
         }
-        //*********************************************
-        //          Method getName
-        //*********************************************
+       
         public String getName()
         {
             return hotelName;
         }
 
-
-
-        //*********************************************
-        //          Method changePrice
-        //*********************************************
+       /// <summary>
+       /// Changes the price and invokes Price cut event
+       /// </summary>
+       /// <param name="price"></param>
+       /// <param name="hotelName"></param>
         public static void changePrice(Int32 price, String hotelName)
         {
             if (price < hotelPrice)
@@ -66,26 +58,30 @@ namespace HotelManagement
             hotelPrice = price;
         }
 
-        //*********************************************
-        //          Method HotelPricecreation
-        //*********************************************
+        /// <summary>
+        /// Generates random price for a HotelSupplier
+        /// </summary>
         public void pricingModel()
         {
             for (Int32 i = 0; i < 5; i++)
             {
-                //Timing
-                Thread.Sleep(rng.Next(500,1000));
+                Thread.Sleep(rng.Next(500,1000)); // Sleep before generating next price cut event
                 Int32 p = rng.Next(25, 100);
                 HotelSupplier.changePrice(p,hotelName);
             }
 
         }
 
+        /// <summary>
+        /// Process the Order
+        /// </summary>
+        /// <param name="obj"></param>
         public void processOrder(OrderObject obj)
         {
             if (totalNumberOfRooms < obj.getRooms())
             {
-                Console.WriteLine("\n\n\t\tRooms are full at {0} !! Sorry {1}!!\n", obj.getreceiverID(), obj.getsenderID());
+                Console.WriteLine("\n\n\t\tTotal rooms available at {0} are {1}. Requested number of rooms are {2} !! Sorry {3}, we dont allow our guests to stay in air!!\n", obj.getreceiverID(), totalNumberOfRooms
+                ,obj.getRooms(),obj.getsenderID());
                 return;
             }
             FarmApplication.EncryptDecryptService.ServiceClient client = new FarmApplication.EncryptDecryptService.ServiceClient();
@@ -94,7 +90,7 @@ namespace HotelManagement
             String result=bankser.validateCard(encryptedstring);
             if (result == "Valid")
             {
-                totalNumberOfRooms--;
+                totalNumberOfRooms-=obj.getRooms();
                 DateTime now = DateTime.UtcNow;
                 TimeSpan difference = now.Subtract(obj.getTime());
                 obj.setOrderTime(difference.TotalSeconds);
@@ -107,9 +103,9 @@ namespace HotelManagement
             }
         }
 
-        //*********************************************
-        //          Read Order
-        //*********************************************
+        /// <summary>
+        /// Check the MultiCellBuffer for Orders
+        /// </summary>
         public void checkOrderFromMultibuffer()
         {
             while (true)
@@ -123,10 +119,5 @@ namespace HotelManagement
                }
             }
         } 
-
- 
-
-
-
     }
 }
