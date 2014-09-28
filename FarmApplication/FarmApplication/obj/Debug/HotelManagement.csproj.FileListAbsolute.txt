@@ -10,3 +10,7 @@ C:\Users\Pravin\Documents\GitHub\CSE598\FarmApplication\FarmApplication\obj\Debu
 C:\Users\Pravin\Documents\GitHub\CSE598\FarmApplication\FarmApplication\bin\Debug\FarmApplication.exe
 C:\Users\Pravin\Documents\GitHub\CSE598\FarmApplication\FarmApplication\bin\Debug\FarmApplication.pdb
 C:\Users\Pravin\Documents\GitHub\CSE598\FarmApplication\FarmApplication\obj\Debug\HotelManagement.csprojResolveAssemblyReference.cache
+C:\Users\Kannan\Desktop\santhoshrpai\HotelManagement\FarmApplication\FarmApplication\bin\Debug\FarmApplication.exe.config
+C:\Users\Kannan\Desktop\santhoshrpai\HotelManagement\FarmApplication\FarmApplication\obj\Debug\FarmApplication.exe
+C:\Users\Kannan\Desktop\santhoshrpai\HotelManagement\FarmApplication\FarmApplication\obj\Debug\FarmApplication.pdb
+C:\Users\Kannan\Desktop\santhoshrpai\HotelManagement\FarmApplication\FarmApplication\obj\Debug\HotelManagement.csprojResolveAssemblyReference.cache
