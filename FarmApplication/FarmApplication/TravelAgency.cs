@@ -47,7 +47,7 @@ namespace HotelManagement
        /// <param name="obj"></param>
        public static void callback(OrderObject obj)
        {
-           Console.WriteLine("\n\n\t\tValidation Success!!! Payment Received\n\t\t**********Booking Reciept ***************\n\t\tHotel:{0}\n\t\tAgency:{1}\n\t\tCard No:{2}\n\t\tAmount:{3}\n\t\t\n\t\tNo of Rooms:{4}\n\t\tTAX:(0.08%){5}\n\t\tTotal:{6}\n\t\tOrder Time:{7}\n\t\t*********************************\n", obj.getreceiverID(), obj.getsenderID(), obj.getcardNumber(), obj.getamount(), obj.getRooms(), obj.getamount() * 0.08, obj.getamount() * 1.08, obj.getOrderTime());
+           Console.WriteLine("\n\n\t\tValidation Success!!! Payment Received\n\t\t**********Booking Reciept ***************\n\t\tHotel:{0}\n\t\tAgency:{1}\n\t\tCard No:{2}\n\t\tAmount:{3}\n\t\tOrder Time:{4}\n\t\t*********************************\n", obj.getreceiverID(), obj.getsenderID(), obj.getcardNumber(), obj.getamount(), obj.getOrderTime());
        }
 
 
@@ -61,7 +61,7 @@ namespace HotelManagement
             public void placeOrder(int noOfRooms, int price ,String hotelname, String agencyname)
             {
                 Random rnd = new Random();
-                Int32 creditcard =rnd.Next(1000, 7999);
+                Int32 creditcard =rnd.Next(5000, 7500); // CC numbers are generated randomly to evaluate INVALID usecase also
                 OrderObject order = new OrderObject();
                 order.setsenderID(agencyname);
                 order.setreceiverID(hotelname);

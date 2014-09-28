@@ -20,7 +20,8 @@ namespace HotelManagement
         {
             FarmApplication.EncryptDecryptService.ServiceClient client = new FarmApplication.EncryptDecryptService.ServiceClient();
             String decryptedcard = client.Decrypt(encrytedcard);
-            if(Int32.Parse(decryptedcard)<6000)
+            int cardNumber = Int32.Parse(decryptedcard);
+            if (cardNumber <= 7000 && cardNumber>=5000)
             {
                 return "Valid";
             }

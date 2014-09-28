@@ -14,7 +14,7 @@ namespace HotelManagement
        private String senderID;
        private String receiverID;
        private Int32 cardNumber;  
-       private Int32 amount;
+       private double amount;
        private Int32 rooms;
        private DateTime time;
        private double orderTime;
@@ -78,11 +78,11 @@ namespace HotelManagement
 
 
 
-        public Int32 getamount()
+        public double getamount()
         {
             return this.amount;
         }
-        public void setamount(Int32 newamount)
+        public void setamount(double newamount)
         {
             this.amount = newamount;
         }

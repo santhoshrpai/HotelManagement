@@ -13,20 +13,14 @@ namespace HotelManagement
 {
     class MainClass
     {
-        static ArrayList  validcreditcards= new ArrayList();
         public static MultiCellBuffer multiCellBuffer = new MultiCellBuffer();
         
         static void Main(string[] args)
         {
           
-            validcreditcards.Add("1234");
-            validcreditcards.Add("4225");
-            validcreditcards.Add("7334");
-            validcreditcards.Add("0556");
-
-            HotelSupplier supplier1 = new HotelSupplier("Holiday Inn",40,10);
+            HotelSupplier supplier1 = new HotelSupplier("Holiday Inn",40,50);
             HotelSupplier supplier2 = new HotelSupplier("Sheraton",30,20);
-            HotelSupplier supplier3 = new HotelSupplier("Grandway",25,15);
+            HotelSupplier supplier3 = new HotelSupplier("Grandway",25,50);
 
             Thread hotel1 = new Thread(new ThreadStart(supplier1.pricingModel));
             Thread hotel2 = new Thread(new ThreadStart(supplier2.pricingModel));
@@ -53,11 +47,17 @@ namespace HotelManagement
 
 
 
-            HotelSupplier.priceCutEvent += new priceCutEvent(agency5.HotelOnSale);
             HotelSupplier.priceCutEvent += new priceCutEvent(agency1.HotelOnSale);
             HotelSupplier.priceCutEvent += new priceCutEvent(agency2.HotelOnSale);
             HotelSupplier.priceCutEvent += new priceCutEvent(agency3.HotelOnSale);
             HotelSupplier.priceCutEvent += new priceCutEvent(agency4.HotelOnSale);
+            HotelSupplier.priceCutEvent += new priceCutEvent(agency5.HotelOnSale);
+
+            hotel1.Join();
+            hotel2.Join();
+            hotel3.Join();
+
+            Console.WriteLine("Main thread: All threads have been terminated.");
             
         }
     }

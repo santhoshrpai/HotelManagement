@@ -17,6 +17,7 @@ namespace HotelManagement
     {
         static Random rng = new Random();
         public static event priceCutEvent priceCutEvent;
+        private int count = 1;
         private static Int32 hotelPrice;
         private String hotelName;
         private Int32 totalNumberOfRooms;
@@ -38,45 +39,34 @@ namespace HotelManagement
             return hotelName;
         }
 
-       /// <summary>
-       /// Changes the price and invokes Price cut event
-       /// </summary>
-       /// <param name="price"></param>
-       /// <param name="hotelName"></param>
-        public static void changePrice(Int32 price, String hotelName)
-        {
-            if (price < hotelPrice)
-            {
-                Console.WriteLine("\n\n\n\t\t***Price Down!!! Hurry up in BOOKING!!*** \n\t\t{0} on sale price : ${1} per room\n\n", hotelName, price);
-            } else {
-                Console.WriteLine("\n\n\n\t\t***Price Up!!! Market is at Peak,:-( !*** \n\t\t{0} on sale price : ${1} per room\n\n", hotelName, price);
-            }
-            if (priceCutEvent != null)
-            {
-                priceCutEvent(price, hotelName);
-            }
-            hotelPrice = price;
-        }
-
         /// <summary>
-        /// Generates random price for a HotelSupplier
+        /// Generates random price and invokes a pricecut event for a HotelSupplier
         /// </summary>
         public void pricingModel()
         {
-            for (Int32 i = 0; i < 5; i++)
+            while (count <= 10) {
+            Thread.Sleep(rng.Next(500,1000)); // Sleep before generating next price cut event
+            Int32 price = rng.Next(25, 100);
+            if (price < hotelPrice)
             {
-                Thread.Sleep(rng.Next(500,1000)); // Sleep before generating next price cut event
-                Int32 p = rng.Next(25, 100);
-                HotelSupplier.changePrice(p,hotelName);
+                Console.WriteLine("\n\n\n\t\t***Price Down Count:{0} for {1}!!! Hurry up in BOOKING!!*** \n\t\t{2} on sale price : ${3} per room\n\n", count,hotelName, hotelName, price);
+                count++;
+                priceCutEvent(price, hotelName);
             }
-
+            else
+            {
+                Console.WriteLine("\n\n\n\t\t***Price Up!!! Market is at Peak,:-( !*** \n\t\t{0} on sale price : ${1} per room\n\n", hotelName, price);
+            }
+            hotelPrice = price;
+            }
         }
+
 
         /// <summary>
         /// Process the Order
         /// </summary>
         /// <param name="obj"></param>
-        public void processOrder(OrderObject obj)
+        public void orderProcessing(OrderObject obj)
         {
             if (totalNumberOfRooms < obj.getRooms())
             {
@@ -91,6 +81,10 @@ namespace HotelManagement
             if (result == "Valid")
             {
                 totalNumberOfRooms-=obj.getRooms();
+                double total = obj.getRooms() * hotelPrice;
+                total+=total*0.08;
+                obj.setamount(total);
+
                 DateTime now = DateTime.UtcNow;
                 TimeSpan difference = now.Subtract(obj.getTime());
                 obj.setOrderTime(difference.TotalSeconds);
@@ -115,7 +109,7 @@ namespace HotelManagement
                {
                    EncoderandDecoder decoder = new EncoderandDecoder();
                    OrderObject obj = decoder.decode(placedorder);
-                   processOrder(obj);
+                   orderProcessing(obj);
                }
             }
         } 
